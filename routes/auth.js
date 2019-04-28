@@ -40,6 +40,7 @@ router.post('/authenticate', function(req, res) {
         } else {
             user.isCorrectedPassword(password, function(err, same) {
                 if (err) {
+                    console.log(err);
                     res.status(500)
                         .json({
                             error: 'Internal error please try again'

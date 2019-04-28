@@ -1,63 +1,113 @@
 const express = require('express');
-
 const router = express.Router();
-const passport = require('passport');
-const JwtStrategy = require('passport-jwt').Strategy;
-const { ExtractJwt } = require('passport-jwt');
+const ensureAuth = require('../middlewares/ensureAuth');
 const User = require('../models/User');
 const Follow = require('../models/follow');
 
-const opts = {};
-opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
-opts.secretOrKey = 'secret';
 
-passport.use(
-    new JwtStrategy(opts, function(jwtPayload, done) {
-        console.log(jwtPayload);
-        User.findOne({ googleID: jwtPayload.data }, function(err, user) {
-            console.log(user);
-            if (err) {
-                return done(err, false);
-            }
-            if (user) {
-                return done(null, user);
-            }
-            return done(null, false);
-            // or you could create a new account
-        });
-    })
-);
-
-router.get('/follow/:following', passport.authenticate('jwt'), async (req, res) => {
+router.post('/:id/follow', ensureAuth, async (req, res) => {
     try {
-        const { following } = req.params;
+        const { id } = req.params;
         const follower = req.user._id;
         // check if follow interaction exists
-        const follow = await Follow.findOne({ following, follower });
+        const follow = await Follow.findOne({ id, follower });
         if (!follow) {
             // insert new follow record
-            const newFollow = await new Follow({ following, follower }).save();
-            res.send({ status: 1, message: newFollow });
+            const newFollow = await new Follow({ id, follower }).save();
+            const follwingUser = await User.findById(id);
+            follwingUser.followers.push(follower);
+            await follwingUser.save();
+            const followerUser = await User.findById(follower);
+            followerUser.following.push(id);
+            await followerUser.save();
+            res.status(200).send({ status: 1, message: newFollow });
+        }else{
+            res.status(200).send({ status: 1, message: follow });
         }
     } catch (error) {
-        res.send({ status: 0, message: error });
+        console.log(error);
+        res.status(500).send({ error: "Internal Error, please try again" });
     }
 });
 
-router.get('/unfollow/:following', passport.authenticate('jwt'), async (req, res) => {
+router.post('/:id/unfollow', ensureAuth, async (req, res) => {
     try {
-        // check if interraction exists
-        const { following } = req.params;
+        // check if interaction exists
+        const { id } = req.params;
         const follower = req.user._id;
         // check if follow interaction exists
-        const follow = await Follow.findOne({ following, follower });
+        const follow = await Follow.findOne({ id, follower });
         if (follow) {
             // insert new follow record
-            const removed = await Follow.findOneAndRemove({ following, follower });
-            res.send({ status: 1, message: removed });
+            const removed = await Follow.findOneAndRemove({ id, follower });
+            const followingUser = await User.findById(id);
+            followingUser.followers = followingUser.followers.filter((followerId) => {
+                return followerId !== follower;
+            });
+            await followingUser.save();
+            const followerUser = await User.findById(follower);
+            followerUser.following = followerUser.following.filter((followingId) => {
+                return followingId !== id;
+            });
+            await followerUser.save();
+            res.status(200).send({ status: 1, message: removed });
         }
     } catch (error) {
-        res.send({ status: 1, message: error });
+        console.log(error);
+        res.status(500).send({ error: "Internal Error, please try again" });
     }
+});
+
+router.get('/search/:query',ensureAuth, async (req,res) => {
+    try {
+        const { query } = req.params;
+        const users = await User.find({username: new RegExp(`${query}`, "i")});
+        res.status(200).send({ status: 1, message: users});
+    }catch(error) {
+        console.log(error);
+        res.status(500).send({ error: "Internal Error, please try again" });
+    }
+
+});
+
+router.get('/:username',ensureAuth ,async (req, res) => {
+   try {
+       const { username } = req.params;
+       const user = await User.aggregate([
+           {
+               $match: {
+                   username : username
+               }
+           },
+           {
+               $lookup: {
+                   from: 'posts',
+                   localField: '_id',
+                   foreignField: 'author',
+                   as: 'posts'
+               }
+           },
+           {
+               $lookup: {
+                   from: 'follows',
+                   localField: '_id',
+                   foreignField: 'following',
+                   as: 'followers'
+               }
+           },
+           {
+               $lookup: {
+                   from: 'follows',
+                   localField: '_id',
+                   foreignField: 'follower',
+                   as: 'followings'
+               }
+           }
+       ]);
+       res.status(200).send({ status: 1, message: user});
+   } catch (error) {
+       console.log(error);
+       res.status(500).send({ error: "Internal Error, please try again" });
+   }
 });
 module.exports = router;

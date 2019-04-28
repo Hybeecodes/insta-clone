@@ -1,10 +1,11 @@
 const express = require('express');
-
 const router = express.Router();
 const multer = require('multer');
 const cloudinary = require('cloudinary');
 const User = require('../models/User');
 const Post = require('../models/Post');
+const Comment = require('../models/Comment');
+const Like = require('../models/Like');
 const ensureAuth = require('../middlewares/ensureAuth');
 const keys = require('../config/keys');
 
@@ -64,6 +65,80 @@ router.post('/new',ensureAuth, upload.single('media'), async (req, res) => {
     } catch (error) {
         console.log(error);
         return res.json({ status: 0, message: error });
+    }
+});
+
+router.post('/:id/comment', ensureAuth, async (req,res) => {
+    const { id } = req.params;
+    const { comment } = req.body;
+    try {
+        // get post
+        const post = await Post.findById(id);
+        if(post){
+            // add comments
+            const newComment = await new Comment({
+                message: comment,
+                post: id,
+                author: req.user._id
+            }).save();
+            post.comments.push(newComment._id);
+            // save updated post
+            await post.save();
+            return res.status(200).json({ status: 1, message: newComment });
+        }
+    }catch(err) {
+        res.status(500).json({error:'Internal error, please try again'});
+    }
+});
+
+router.post('/:id/like',ensureAuth, async (req,res) => {
+    try {
+        const { id } = req.params;
+        const post = await Post.findById(id);
+        if(post){
+            // check if like exists
+            const like = await Like.findOne({ post: id, author: req.user._id });
+            if(!like){
+                const newLike = await new Like({ post: id, author: req.user._id}).save();
+                post.likes.push(newLike._id);
+                await post.save();
+                res.status(200).json({status:1,message:newLike});
+            }else{
+                res.status(200).json({status:2,message:like});
+            }
+        }
+    }catch(err) {
+        console.log(err);
+        res.status(500).json({error:'Internal error, please try again'});
+    }
+
+});
+
+router.post('/:id/unlike', ensureAuth, async (req,res) => {
+    try {
+        const { id } =req.params;
+        const post = await Post.findById(id);
+        if(post){
+            // find like and delete it
+            const like = await Like.findOne({ post: id, author: req.user._id });
+            console.log(like);
+            if(like){
+                await Like.findByIdAndRemove(like._id);
+                // remove from post like array
+                const postLikes = post.likes;
+                post.likes = postLikes.filter((likeId) => {
+                    // console.log(typeof likeId);
+                    return String(likeId) !== String(like._id);
+                });
+                console.log(like._id);
+                console.log(post.likes);
+                await post.save();
+                res.status(200).send("Success");
+            }
+        }
+    } catch (err){
+        console.log(err);
+        res.status(500).json({error:'Internal error, please try again'});
     }
 });
 

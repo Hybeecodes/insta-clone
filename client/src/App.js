@@ -7,6 +7,9 @@ import Header from "./components/Header";
 import Login from "./components/Login";
 import Home from "./components/Home";
 import WithAuth from "./components/WithAuth";
+import SearchResults from "./components/SearchResults";
+import User from "./components/User";
+import PostDetails from "./components/PostDetails";
 
 class App extends Component {
   state = {
@@ -15,7 +18,7 @@ class App extends Component {
   };
 
   componentDidMount() {
-    // this.props.fetchUser();
+
   }
 
   render() {
@@ -31,6 +34,9 @@ class App extends Component {
                   {/*path='/'*/}
                   {/*render={(props) => <Home {...props} isAuthed={this.state.loggedIn} />}*/}
               {/*/>*/}
+            <Route path="/search/:query" component={WithAuth(SearchResults)} />
+            <Route path="/users/:username" component={WithAuth(User)} />
+              <Route path="/posts/:post_id" component={WithAuth(PostDetails)} />
             <Route exact path="/" component={WithAuth(Home)} />
           </div>
         </BrowserRouter>

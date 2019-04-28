@@ -8,6 +8,8 @@ const PostSchema = new Schema(
         media: { type: String, required: true },
         mediaType: { type: String, enum: ['image', 'video'], required: true },
         caption: { type: String, required: false },
+        comments: [{type: Schema.ObjectId, ref: 'Comment'}],
+        likes: [{type: Schema.ObjectId, ref: 'Like'}]
     },
     { timestamps: true }
 );

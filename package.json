@@ -4,7 +4,10 @@
   "description": "A simple clone of instagram",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node app.js",
+    "server": "nodemon index.js",
+    "client": "npm run start --prefix client",
+    "dev": "concurrently \"npm run server\" \"npm run client \""
   },
   "author": "Hybeecodes",
   "license": "ISC",
@@ -33,5 +36,7 @@
     "redux": "^4.0.1",
     "redux-thunk": "^2.3.0"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "concurrently": "^4.1.0"
+  }
 }

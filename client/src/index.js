@@ -6,6 +6,7 @@ import { createStore, applyMiddleware } from 'redux';
 import reducers from './reducers';
 import reduxThunk from 'redux-thunk';
 import App from './App';
+import 'semantic-ui-css/semantic.css';
 import * as serviceWorker from './serviceWorker';
 
 const store = createStore(reducers, {}, applyMiddleware(reduxThunk));

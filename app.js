@@ -10,6 +10,7 @@ const cors = require('cors');
 
 const authRouter = require('./routes/auth');
 const postRouter = require('./routes/post');
+const userRouter = require('./routes/user');
 
 mongoose.connect(keys.mongoURI,{ useNewUrlParser: true });
 const app = express();
@@ -32,6 +33,7 @@ app.use(passport.session());
 
 app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/posts', postRouter);
+app.use('/api/v1/users', userRouter);
 
 const PORT = process.env.PORT || 5000 ;
 app.listen(PORT);
