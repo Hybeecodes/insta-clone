@@ -15,6 +15,14 @@ li {
   padding: 50px;
 }
 
+.username {
+  color: black;
+}
+
+.username:hover {
+  color: black;
+}
+
 .post {
   margin: 10px;
 }

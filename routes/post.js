@@ -59,6 +59,7 @@ router.post('/new',ensureAuth, upload.single('media'), async (req, res) => {
                     caption,
                 });
                 newPost = await newPost.save();
+                newPost = await Post.findById(newPost._id).populate('author');
                 return res.json({ status: 1, message: newPost });
             }
         }

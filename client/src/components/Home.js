@@ -1,14 +1,23 @@
 import React, {Component} from 'react';
 import { Row, Col} from "react-bootstrap";
-import { connect } from "react-redux";
 import NewPost from "./NewPost";
 import Posts from "./Posts";
 import Notifications from "./Notifications";
-import axios from 'axios';
+import axios from "axios";
 
 class Home extends Component {
     state = {
         posts: []
+    };
+
+    addNewPost = (post) => {
+        const { posts } = this.state;
+        let newPosts = posts;
+        newPosts.push(post);
+        console.log('state', this.state);
+        this.setState({
+            posts: newPosts
+        })
     };
     componentDidMount() {
         axios.get('/api/v1/posts')
@@ -18,17 +27,16 @@ class Home extends Component {
                 })
             })
             .catch((err) => {
-
+                console.log(err);
             });
     }
 
     render() {
-        console.log(this.props);
         return (
             <div>
                 <Row>
                     <Col md={8}>
-                        <NewPost/>
+                        <NewPost addPost={this.addNewPost} />
                         <br/>
                         <Posts posts={this.state.posts} />
                     </Col>
@@ -40,4 +48,7 @@ class Home extends Component {
         );
     }
 }
-export default connect(null)(Home);
+
+
+
+export default Home;

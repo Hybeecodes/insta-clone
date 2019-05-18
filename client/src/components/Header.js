@@ -49,7 +49,4 @@ class Header extends Component {
     }
 }
 
-function mapStateToProps({ auth }) {
-    return { auth };
-}
-export default withRouter(connect(mapStateToProps)(Header));
+export default withRouter(Header);

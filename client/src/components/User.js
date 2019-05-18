@@ -35,7 +35,7 @@ class User extends Component {
                 const link = `/posts/${post._id}`;
                 return (
                     <a href={link} key={post._id} className="ui medium image">
-                        <Image src={post.media} alt={post._id} size='medium' rounded />
+                        <Image src={post.media} alt={post._id} />
                     </a>
                 )
             })
@@ -49,7 +49,7 @@ class User extends Component {
                 <div className="head">
                     <Grid>
                         <Grid.Column width={4}>
-                            <Image src='https://react.semantic-ui.com/images/wireframe/square-image.png' size='medium' circular />
+                            <Image src='https://png.pngtree.com/svg/20161027/service_default_avatar_182956.png' size='medium' circular />
                         </Grid.Column>
                         <Grid.Column width={12} className="userDetails" style={this.style}>
                             <Button as='div' labelPosition='right'>
@@ -80,7 +80,8 @@ class User extends Component {
                     </Grid>
                 </div>
                 <Divider/>
-                <Image.Group size='small'>
+
+                <Image.Group size='medium fluid rounded bordered images'>
                     { postList }
                 </Image.Group>
             </div>

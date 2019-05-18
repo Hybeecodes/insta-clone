@@ -4,7 +4,7 @@ import Post from "./Post";
 
 class Posts extends Component {
     render() {
-        // console.log(this.props);
+        console.log('props ',this.props);
         const {posts} = this.props;
         const postList = posts.length ?  (
             posts.map(post => {

@@ -15,7 +15,6 @@ class Post extends Component {
     };
 
     componentDidMount() {
-        console.log('props is',this.props);
         this.setState({
             commentsNumber:this.props.post.comments.length,
             likesNumber:this.props.post.likes.length
@@ -93,10 +92,13 @@ class Post extends Component {
         ) : '';
         const showLike = this.state.like? <i className='fas fa-heart fa-2x like red' onClick={this.toggleLike}> </i> : <i className='far fa-heart fa-2x like' onClick={this.toggleLike}></i>;
         const showSave = this.state.save? <i className='fas fa-bookmark fa-2x save' onClick={this.toggleSave}></i> : <i className='far fa-bookmark fa-2x save' onClick={this.toggleSave}></i>;
+        const userPosts = `/users/${post.author.username}`;
         return (
             <Card className="post">
                 <Card.Header>
-                    <Image src="//via.placeholder.com/25x25" roundedCircle /> {post.author.username}
+                    <a href={userPosts} className="username">
+                        <Image src="//via.placeholder.com/25x25" roundedCircle /> {post.author.username}
+                    </a>
                 </Card.Header>
                 <Card.Body>
                     <Image src={post.media} rounded fluid /> <br/> <br/>

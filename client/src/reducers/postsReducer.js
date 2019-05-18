@@ -1,9 +1,11 @@
 import { FETCH_POSTS} from "../actions/types";
 
-export default function (state = null, action) {
+export default function (state = [], action) {
     switch (action.type) {
         case FETCH_POSTS:
-            return action.payload || false;
+            return {
+                ...state, posts: action.payload
+            };
         default:
             return state;
     }
