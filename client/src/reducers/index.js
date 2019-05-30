@@ -1,8 +1,19 @@
-import { combineReducers } from 'redux';
-import authReducer from './authReducer';
-import postsReducer from "./postsReducer";
-
-export default combineReducers({
-    auth: authReducer,
-    posts: postsReducer
-});
+import axios from 'axios';
+export const reducer = (state = {}, action) => {
+    switch (action.type) {
+      case 'FETCH_POSTS':
+        axios.get('/api/v1/posts')
+        .then((res) => {
+            console.log(res)
+            return {
+                ...state, posts: res.data
+            }
+        })
+        .catch((err) => {
+            console.log(err);
+        });
+        return state;
+      default:
+        return state
+    }
+  }

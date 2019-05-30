@@ -1,8 +1,24 @@
 import React, {Component} from 'react';
-import { connect } from "react-redux";
-import { Button, Navbar, Nav, Form, FormControl } from 'react-bootstrap';
+import { Navbar, Nav, Form, FormControl } from 'react-bootstrap';
+import { Button, Icon, Input } from 'semantic-ui-react';
+import { withRouter } from 'react-router-dom';
 
 class Header extends Component {
+    state = {
+          query: ''
+    };
+    handleInputChange = (e) => {
+        const { value, name } = e.target;
+        this.setState({
+            [name]: value
+        });
+    };
+
+    handleSearch = (event) => {
+        event.preventDefault();
+        const { query } = this.state;
+        this.props.history.push(`/search/${query}`);
+    };
     render(props) {
         // console.log(this.props);
         return (
@@ -16,8 +32,14 @@ class Header extends Component {
                             {/*<Nav.Link href="/logout">Logout</Nav.Link>*/}
                         </Nav>
                         <Form inline>
-                            <FormControl type="text" placeholder="Search" className="mr-sm-2" />
-                            <Button variant="outline-success">Search</Button>
+                            <Input icon='user' name='query' onChange={this.handleInputChange} iconPosition='left' placeholder='Search user...' />
+
+                            <Button  color='blue' onClick={this.handleSearch} animated>
+                                <Button.Content visible>Search</Button.Content>
+                                <Button.Content hidden>
+                                    <Icon name='arrow right' />
+                                </Button.Content>
+                            </Button>
                         </Form>
                     </Navbar.Collapse>
                 </Navbar>
@@ -26,7 +48,4 @@ class Header extends Component {
     }
 }
 
-function mapStateToProps({ auth }) {
-    return { auth };
-}
-export default connect(mapStateToProps)(Header);
+export default withRouter(Header);

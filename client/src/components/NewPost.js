@@ -12,10 +12,14 @@ class NewPost extends Component {
             selectedFile: e.target.files[0]
         });
     };
+    addNewPost = (post) => {
+        this.props.addPost(post);
+        // console.log(this.props);
+    };
 
     handleInputChange = (e) => {
         const { value, name } = e.target;
-        console.log(value);
+        // console.log(value);
         this.setState({
             [name]: value
         });
@@ -25,6 +29,11 @@ class NewPost extends Component {
         fd.append('media', this.state.selectedFile);
         fd.append('caption',this.state.caption);
         axios.post('/api/v1/posts/new', fd).then((res) => {
+            this.addNewPost(res.data.message);
+            this.setState({
+                selectedFile: null,
+                caption:''
+            });
             console.log(res);
         }).catch((err) => {
             console.log(err);

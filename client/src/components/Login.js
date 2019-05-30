@@ -42,7 +42,11 @@ class Login extends Component {
         const { showAlert, alertMsg } = this.state;
         let renderAlert = '';
         if(showAlert){
+<<<<<<< HEAD
             renderAlert = <Alert variant="success" > {alertMsg} </Alert>
+=======
+            renderAlert = <Alert variant="success"> {alertMsg} </Alert>
+>>>>>>> bba50c4ff789cf3a5ead4a20a255b663347d22f6
         }
         return (
                 <Card className="login">

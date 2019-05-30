@@ -4,7 +4,10 @@
   "description": "A simple clone of instagram",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node app.js",
+    "server": "nodemon index.js",
+    "client": "npm run start --prefix client",
+    "dev": "concurrently \"npm run server\" \"npm run client \""
   },
   "author": "Hybeecodes",
   "license": "ISC",
@@ -25,13 +28,9 @@
     "multer": "^1.4.1",
     "passport": "^0.4.0",
     "passport-google-oauth20": "^1.0.0",
-    "passport-jwt": "^4.0.0",
-    "react": "^16.8.6",
-    "react-dom": "^16.8.6",
-    "react-redux": "^7.0.1",
-    "react-router-dom": "^5.0.0",
-    "redux": "^4.0.1",
-    "redux-thunk": "^2.3.0"
+    "passport-jwt": "^4.0.0"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "concurrently": "^4.1.0"
+  }
 }

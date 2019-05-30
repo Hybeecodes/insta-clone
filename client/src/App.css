@@ -8,6 +8,25 @@
   pointer-events: none;
 }
 
+li {
+    list-style: none;
+}
+.userDetails {
+  padding: 50px;
+}
+
+.username {
+  color: black;
+}
+
+.username:hover {
+  color: black;
+}
+
+.post {
+  margin: 10px;
+}
+
 .App-header {
   background-color: #282c34;
   min-height: 100vh;
@@ -17,6 +36,15 @@
   justify-content: center;
   font-size: calc(10px + 2vmin);
   color: white;
+}
+.author {
+  color: black !important;
+}
+.like, .save {
+  cursor: pointer;
+}
+.red {
+  color: crimson;
 }
 
 .App-link {
