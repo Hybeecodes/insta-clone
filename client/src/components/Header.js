@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import { connect } from "react-redux";
 import { Navbar, Nav, Form, FormControl } from 'react-bootstrap';
 import { Button, Icon, Input } from 'semantic-ui-react';
 import { withRouter } from 'react-router-dom';

@@ -4,6 +4,7 @@ import NewPost from "./NewPost";
 import Posts from "./Posts";
 import Notifications from "./Notifications";
 import axios from "axios";
+import { store } from '../store';
 
 class Home extends Component {
     state = {
@@ -20,16 +21,19 @@ class Home extends Component {
         })
     };
     componentDidMount() {
-        axios.get('/api/v1/posts')
-            .then((res) => {
-                this.setState({
-                    posts: res.data
-                })
-            })
-            .catch((err) => {
-                console.log(err);
-            });
+        console.log(store.getState())
+        store.dispatch({type: 'FETCH_POSTS',payload: {}})
+        // axios.get('/api/v1/posts')
+        //     .then((res) => {
+        //         this.setState({
+        //             posts: res.data
+        //         })
+        //     })
+        //     .catch((err) => {
+        //         console.log(err);
+        //     });
     }
+
 
     render() {
         return (
@@ -38,7 +42,7 @@ class Home extends Component {
                     <Col md={8}>
                         <NewPost addPost={this.addNewPost} />
                         <br/>
-                        <Posts posts={this.state.posts} />
+                        <Posts posts={store.getState().posts} />
                     </Col>
                     <Col md={4}>
                         <Notifications/>

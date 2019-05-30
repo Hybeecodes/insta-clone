@@ -20,9 +20,9 @@ router.post('/:id/follow', ensureAuth, async (req, res) => {
             const followerUser = await User.findById(follower);
             followerUser.following.push(id);
             await followerUser.save();
-            res.status(200).send({ status: 1, message: newFollow });
+            res.status(200).send(newFollow);
         }else{
-            res.status(200).send({ status: 1, message: follow });
+            res.status(400).send('Bad Request');
         }
     } catch (error) {
         console.log(error);
@@ -50,7 +50,7 @@ router.post('/:id/unfollow', ensureAuth, async (req, res) => {
                 return followingId !== id;
             });
             await followerUser.save();
-            res.status(200).send({ status: 1, message: removed });
+            res.status(200).send(removed);
         }
     } catch (error) {
         console.log(error);
@@ -65,7 +65,7 @@ router.get('/search/:query',ensureAuth, async (req,res) => {
         res.status(200).send({ status: 1, message: users});
     }catch(error) {
         console.log(error);
-        res.status(500).send({ error: "Internal Error, please try again" });
+        res.status(500).send({ error: "InternanewFollowl Error, please try again" });
     }
 
 });

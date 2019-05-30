@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import {Redirect} from 'react-router-dom';
-import * as actions from '../actions';
 
 export default function WithAuth(ComponentToProtect) {
     return class extends Component {

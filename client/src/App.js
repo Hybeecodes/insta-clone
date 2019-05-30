@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
-import { connect } from "react-redux";
 import * as actions from './actions';
 import Header from "./components/Header";
 import Login from "./components/Login";
@@ -45,4 +44,4 @@ class App extends Component {
   }
 }
 
-export default connect(null,actions)(App);
+export default App;
