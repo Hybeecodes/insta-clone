@@ -13,7 +13,7 @@ class Header extends Component {
                     <Navbar.Collapse id="basic-navbar-nav">
                         <Nav className="mr-auto">
                             {/*<Nav.Link href="#home">Home</Nav.Link>*/}
-                            {/*<Nav.Link href="#link">Link</Nav.Link>*/}
+                            {/*<Nav.Link href="/logout">Logout</Nav.Link>*/}
                         </Nav>
                         <Form inline>
                             <FormControl type="text" placeholder="Search" className="mr-sm-2" />

@@ -20,7 +20,7 @@ class Login extends Component {
     onSubmit = (event) => {
         event.preventDefault();
         this.setState({loginBtnText: 'Please wait ...'});
-        axios.post('/api/v1/auth/authenticate', {email: this.state.email, pass: this.state.password})
+        axios.post('/api/v1/auth/authenticate', {email: this.state.email, password: this.state.password})
         .then(res => {
             console.log(res.data);
             if (res.status === 200) {
@@ -42,7 +42,7 @@ class Login extends Component {
         const { showAlert, alertMsg } = this.state;
         let renderAlert = '';
         if(showAlert){
-            renderAlert = <Alert> {alertMsg} </Alert>
+            renderAlert = <Alert variant="success" > {alertMsg} </Alert>
         }
         return (
                 <Card className="login">

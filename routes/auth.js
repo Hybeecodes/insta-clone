@@ -8,8 +8,8 @@ const secret = 'gdyghfdjgdghd';
 const ensureAuth = require('../middlewares/ensureAuth');
 
 router.post('/register', (req,res) => {
-   const { email, password } = req.body;
-   const user = new User({email, password});
+   const { email, password, username } = req.body;
+   const user = new User({email, password, username});
    user.save((err) => {
       if(err) {
           console.log(err);
@@ -25,9 +25,10 @@ router.post('/register', (req,res) => {
 router.post('/authenticate', function(req, res) {
     console.log(req.body);
     const { email, password } = req.body;
+    // console.log(password);
     User.findOne({ email }, function(err, user) {
         if (err) {
-            console.error(err);
+            // console.error(err);
             res.status(500)
                 .json({
                     error: 'Internal error please try again'
@@ -40,6 +41,7 @@ router.post('/authenticate', function(req, res) {
         } else {
             user.isCorrectedPassword(password, function(err, same) {
                 if (err) {
+                    console.log(err);
                     res.status(500)
                         .json({
                             error: 'Internal error please try again'
@@ -65,6 +67,10 @@ router.post('/authenticate', function(req, res) {
 
 router.get('/checkToken',ensureAuth, (req,res) => {
    res.sendStatus(200);
+});
+
+router.get('/logout', ensureAuth, (req,res) => {
+   req.user = null;
 });
 
 module.exports = router;
